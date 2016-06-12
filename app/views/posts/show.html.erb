@@ -1,0 +1,57 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @post.user.email %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @post.title %>
+</p>
+
+<p>
+  <strong>Body:</strong>
+  <%= @post.body %>
+</p>
+
+<p>
+  <strong>Cooments: </strong>
+  <br>
+  <% @post.comments.each do |comment|%>
+
+    <%  user = @user.where(id: comment.user_id) %>
+    <%= user[0].email unless user.empty? %>
+    <%#= comment.user_id %>
+    <br>
+    <%= comment.body %> <br>
+    <%= comment.created_at%><br>
+    <%= link_to 'delete',[@post,comment], method: :delete unless comment.body==nil%>
+
+    <br><br>
+  <%end%>
+</p>
+
+<%#= @post.id %>
+
+
+<%= form_for [@post, @comment] do |f| %>
+
+  <div class="form-group">
+      <%= f.label :Comment %>
+      <%= f.text_field :body %>
+  </div>
+
+    <div class="form-group">
+        <%= f.submit%>
+    </div>
+
+<% end %>
+
+
+<%#= link_to 'Comment_new', new_post_comment_path(@post) %>
+
+<%if @post.user.email==current_user.email or current_user.id==1%>
+<%= link_to 'Edit', edit_post_path(@post) %> |
+<%end%>
+<%= link_to 'Back', posts_path %>
