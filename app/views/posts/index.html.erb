@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Posts</h1>
+<h2>Listing Posts</h2>
 
 <table class="table">
   <thead>
@@ -17,7 +17,7 @@
       <tr>
         <td><%= post.user.email %></td>
         <td><%= post.title %></td>
-        <td><%= post.body %></td>
+        <td><%= truncate(strip_tags(post.body), length: 80) %></td>
         <td><%= link_to 'Show', post %></td>
         <%if post.user.email==current_user.email or current_user.id==1%>
           <td><%= link_to 'Edit', edit_post_path(post) %></td>
@@ -27,11 +27,3 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-
-<ul class="nav nav-pills">
-    <li role="presentation" class="active"><%= link_to 'New Post', new_post_path %></li>
-</ul>
-
