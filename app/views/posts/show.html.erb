@@ -1,36 +1,35 @@
+<h2><%= @post.title %></h2>
+
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>User:</strong>
-  <%= @post.user.email %>
-</p>
+<div id = "post">
+  <div id = "body">
+  <%= sanitize @post.body %>
+  </div>
 
-<p>
-  <strong>Title:</strong>
-  <%= @post.title %>
-</p>
+  <div id = "info">
+    <%= @post.user.email %>|
+    <%= @post.created_at %>|
+    <%if @post.user.email==current_user.email or current_user.id==1%>
+      <%= link_to 'Edit', edit_post_path(@post) %> | <%= link_to 'Delete',  @post, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <%end%>
+  </div>
+</div>
 
-<p>
-  <strong>Body:</strong>
-  <%= @post.body %>
-</p>
-
-<p>
+<br>
+<div id = "comments">
   <strong>Cooments: </strong>
-  <br>
-  <% @post.comments.each do |comment|%>
 
+  <% @post.comments.each do |comment|%>
+    <br>
     <%  user = @user.where(id: comment.user_id) %>
     <%= user[0].email unless user.empty? %>
-    <%#= comment.user_id %>
     <br>
     <%= comment.body %> <br>
     <%= comment.created_at%><br>
     <%= link_to 'delete',[@post,comment], method: :delete unless comment.body==nil%>
-
-    <br><br>
   <%end%>
-</p>
+</div>
 
 <%#= @post.id %>
 
@@ -38,20 +37,14 @@
 <%= form_for [@post, @comment] do |f| %>
 
   <div class="form-group">
-      <%= f.label :Comment %>
-      <%= f.text_field :body %>
+      <%= f.label %s{ Leave your comment:}  %><br>
+      <%= f.text_area :body, rows: 4, cols: 40 %>
   </div>
-
-    <div class="form-group">
-        <%= f.submit%>
-    </div>
+  <%= f.submit%> 
 
 <% end %>
 
 
 <%#= link_to 'Comment_new', new_post_comment_path(@post) %>
 
-<%if @post.user.email==current_user.email or current_user.id==1%>
-<%= link_to 'Edit', edit_post_path(@post) %> |
-<%end%>
 <%= link_to 'Back', posts_path %>
